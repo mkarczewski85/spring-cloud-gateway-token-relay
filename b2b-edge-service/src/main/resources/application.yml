@@ -1,0 +1,33 @@
+server:
+  port: 9000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  application:
+    name: b2b-edge-service
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: spring-gateway
+            client-secret: spring-client-secret
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/realms/b2b
+  session:
+    redis:
+      repository-type: default
+  cloud:
+    gateway:
+      server:
+        webflux:
+          default-filters:
+            - SaveSession
+            - TokenRelay
